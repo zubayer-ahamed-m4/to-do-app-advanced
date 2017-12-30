@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<title th:text="#{todoapp.title}">ToDo APP</title>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<span th:substituteby="commons :: common-css"></span>
+	</head>
+	<body>
+		<!-- top fixed menu -->
+		<nav class="navbar navbar-inverse navbar-fixed-top">
+			<div class="container-fluid">
+				<div class="navbar-header">
+					<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+						<span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span>
+					</button>
+					<a class="navbar-brand" th:href="@{/todo}">To Do App</a>
+				</div>
+				<div class="collapse navbar-collapse" id="myNavbar">
+					<ul class="nav navbar-nav">
+					</ul>
+					<ul class="nav navbar-nav navbar-right">
+						<li><a href="#"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
+						<li><a href="#"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+					</ul>
+				</div>
+			</div>
+		</nav>
+		<!-- /top fixed menu -->
+		<!-- content area -->
+		<div class="col-md-12 wrapper">
+			<div class="row">
+				<!-- to do panel -->
+				<div class="col-md-4">
+					<div class="panel panel-default">
+						<div class="panel-heading">
+							<h4>To Do</h4>
+						</div>
+						<div id="todo" ondrop="drop(event, this)" ondragover="allowDrop(event)" class="panel-body">
+							<!-- add to do item form -->
+							<a onClick="displayAddForm()" href="#" id="addItemButton">Add Item</a>
+							<form id="addForm" th:if="${item.id == null}" th:action="@{/todo}" method="POST" th:object="${item}">
+								<textarea th:field="*{description}" rows="5" class="form-control"></textarea>
+								<button type="submit" class="btn btn-success btn-sm"><i class="fa fa-save"></i> Save</button>
+								<a th:href="@{/todo}" class="btn btn-danger btn-sm"><i class="fa fa-times"></i></a>
+							</form>
+							<!-- /add to do item form -->
+							<!-- to do items -->
+							<div th:id="${rowItem.id}" th:each="rowItem : ${todoItems}" draggable="true" ondragstart="drag(event)" ondrop="return false" ondragover="return false" class="col-md-12 item-box">
+								<span th:if="${item.id != null and item.id == rowItem.id}">
+									<!-- update to do item form -->
+									<form id="updateForm" th:if="${item.id != null}" th:action="@{/todo}" th:object="${item}" method="POST">
+										<input th:field="*{id}" type="hidden"/>
+										<input th:field="*{itemType}" type="hidden"/>
+										<textarea th:field="*{description}" rows="5" class="form-control"></textarea>
+										<button type="submit" class="btn btn-warning btn-sm"><i class="fa fa-edit"></i> Update</button>
+										<a th:href="@{/todo}" class="btn btn-danger btn-sm"><i class="fa fa-times"></i></a>
+									</form>
+									<!-- /update to do item form -->
+								</span>
+								<span th:if="${item.id != null and item.id != rowItem.id}">
+									<a th:href="@{/todo/delete/} + ${rowItem.id}" class="pull-right" title="Delete"><i class="fa fa-trash"></i></a>
+									<a th:href="@{/todo/} + ${rowItem.id}" class="pull-right" title="Edit"><i class="fa fa-edit"></i></a>
+									<p th:text="${{rowItem.description}}">item text</p>
+								</span>
+								<span th:if="${item.id == null}">
+									<a th:href="@{/todo/delete/} + ${rowItem.id}" class="pull-right" title="Delete"><i class="fa fa-trash"></i></a>
+									<a th:href="@{/todo/} + ${rowItem.id}" class="pull-right" title="Edit"><i class="fa fa-edit"></i></a>
+									<p th:text="${{rowItem.description}}">item text</p>
+								</span>
+							</div>
+							<!-- /to do items -->
+						</div>
+						<div class="panel-footer"></div>
+					</div>
+				</div>
+				<!-- /to do panel -->
+				<!-- in progress panel -->
+				<div class="col-md-4">
+					<div class="panel panel-default">
+						<div class="panel-heading">
+							<h4>In Progress</h4>
+						</div>
+						<div id="inProgress" ondrop="drop(event, this)" ondragover="allowDrop(event)" class="panel-body">
+							<!-- in progress items -->
+							<div th:id="${rowItem.id}" th:each="rowItem : ${inProgressItems}" draggable="true" ondragstart="drag(event)" ondrop="return false" ondragover="return false" class="col-md-12 item-box">
+								<span th:if="${item.id != null and item.id == rowItem.id}">
+									<!-- update to do item form -->
+									<form id="updateForm" th:if="${item.id != null}" th:action="@{/todo}" th:object="${item}" method="POST">
+										<input th:field="*{id}" type="hidden"/>
+										<input th:field="*{itemType}" type="hidden"/>
+										<textarea th:field="*{description}" rows="5" class="form-control"></textarea>
+										<button type="submit" class="btn btn-warning btn-sm"><i class="fa fa-edit"></i> Update</button>
+										<a th:href="@{/todo}" class="btn btn-danger btn-sm"><i class="fa fa-times"></i></a>
+									</form>
+									<!-- /update to do item form -->
+								</span>
+								<span th:if="${item.id != null and item.id != rowItem.id}">
+									<a th:href="@{/todo/delete/} + ${rowItem.id}" class="pull-right" title="Delete"><i class="fa fa-trash"></i></a>
+									<a th:href="@{/todo/} + ${rowItem.id}" class="pull-right" title="Edit"><i class="fa fa-edit"></i></a>
+									<p th:text="${{rowItem.description}}">item text</p>
+								</span>
+								<span th:if="${item.id == null}">
+									<a th:href="@{/todo/delete/} + ${rowItem.id}" class="pull-right" title="Delete"><i class="fa fa-trash"></i></a>
+									<a th:href="@{/todo/} + ${rowItem.id}" class="pull-right" title="Edit"><i class="fa fa-edit"></i></a>
+									<p th:text="${{rowItem.description}}">item text</p>
+								</span>
+							</div>
+							<!-- /in progress items -->
+						</div>
+						<div class="panel-footer"></div>
+					</div>
+				</div>
+				<!-- /in progress panel -->
+				<!-- done panel -->
+				<div class="col-md-4">
+					<div class="panel panel-default">
+						<div class="panel-heading">
+							<h4>Done</h4>
+						</div>
+						<div id="done" ondrop="drop(event, this)" ondragover="allowDrop(event)" class="panel-body">
+							<!-- done items -->
+							<div th:id="${rowItem.id}" th:each="rowItem : ${doneItems}" draggable="true" ondragstart="drag(event)" ondrop="return false" ondragover="return false" class="col-md-12 item-box">
+								<span th:if="${item.id != null and item.id == rowItem.id}">
+									<!-- update to do item form -->
+									<form id="updateForm" th:if="${item.id != null}" th:action="@{/todo}" th:object="${item}" method="POST">
+										<input th:field="*{id}" type="hidden"/>
+										<input th:field="*{itemType}" type="hidden"/>
+										<textarea th:field="*{description}" rows="5" class="form-control"></textarea>
+										<button type="submit" class="btn btn-warning btn-sm"><i class="fa fa-edit"></i> Update</button>
+										<a th:href="@{/todo}" class="btn btn-danger btn-sm"><i class="fa fa-times"></i></a>
+									</form>
+									<!-- /update to do item form -->
+								</span>
+								<span th:if="${item.id != null and item.id != rowItem.id}">
+									<a th:href="@{/todo/delete/} + ${rowItem.id}" class="pull-right" title="Delete"><i class="fa fa-trash"></i></a>
+									<a th:href="@{/todo/} + ${rowItem.id}" class="pull-right" title="Edit"><i class="fa fa-edit"></i></a>
+									<p th:text="${{rowItem.description}}">item text</p>
+								</span>
+								<span th:if="${item.id == null}">
+									<a th:href="@{/todo/delete/} + ${rowItem.id}" class="pull-right" title="Delete"><i class="fa fa-trash"></i></a>
+									<a th:href="@{/todo/} + ${rowItem.id}" class="pull-right" title="Edit"><i class="fa fa-edit"></i></a>
+									<p th:text="${{rowItem.description}}">item text</p>
+								</span>
+							</div>
+							<!-- /done items -->
+						</div>
+						<div class="panel-footer"></div>
+					</div>
+				</div>
+				<!-- /done panel -->
+				<!-- set the data for javascript use -->
+				<div class="col-md-12" id="message" style="display: none;">
+					<input type="hidden" id="itemId"/>
+					<input type="hidden" id="fromId"/>
+					<input type="hidden" id="toId"/>
+				</div>
+				<!-- To Do Panel -->
+			</div>
+		</div>
+		<!-- /content area -->
+		<!-- script -->
+		<script type="text/javascript">
+			function displayAddForm(){
+				document.getElementById("addForm").style = "display: block";
+				document.getElementById("description").focus();
+			}
+			
+			function allowDrop(ev) {
+			  	ev.preventDefault();
+			}
+	
+			function drag(ev) {
+			  	ev.dataTransfer.setData("text", ev.target.id);
+			  	var id = ev.target.id;
+				document.getElementById("itemId").value = id;
+				document.getElementById("fromId").value = document.getElementById(id).parentNode.id;
+			}
+	
+			function drop(ev, el) {
+		  		ev.preventDefault();
+		  		var data = ev.dataTransfer.getData("text");
+		  		el.appendChild(document.getElementById(data));
+	  			document.getElementById("toId").value = document.getElementById(data).parentNode.id;
+	  			doWork();
+			}
+			
+			function doWork(){
+				var fromId = document.getElementById("fromId").value;
+				var itemId = document.getElementById("itemId").value;
+				var toId = document.getElementById("toId").value;
+				var objectData = {"id" : itemId, "description" : "", "itemType" : toId.toUpperCase()};
+				$.ajax({
+					method : "POST",
+					url : "/todo/changeItemType",
+					contentType : "application/json",
+					data : JSON.stringify(objectData),
+					dataType: "json"
+				}).done(function(data) {
+					document.location.reload();
+				});
+			}
+		</script>
+		<span th:substituteby="commons :: common-js"></span>
+	</body>
+</html>
