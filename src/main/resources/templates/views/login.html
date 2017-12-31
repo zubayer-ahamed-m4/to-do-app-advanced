@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<title th:text="#{todoapp.title}">ToDo APP</title>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<span th:substituteby="commons :: common-css"></span>
+	</head>
+	<body>
+		<!-- top fixed menu -->
+		<nav class="navbar navbar-inverse navbar-fixed-top">
+			<div class="container-fluid">
+				<div class="navbar-header">
+					<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+						<span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span>
+					</button>
+					<a class="navbar-brand" th:href="@{/todo}">To Do App</a>
+				</div>
+				<div class="collapse navbar-collapse" id="myNavbar">
+					<ul class="nav navbar-nav">
+					</ul>
+					<ul class="nav navbar-nav navbar-right">
+						<li><a href="#"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
+						<li><a href="#"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+						<li><a th:href="@{/logout}"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
+					</ul>
+				</div>
+			</div>
+		</nav>
+		<!-- /top fixed menu -->
+		<!-- content area -->
+		<div class="col-md-12 wrapper">
+			<div class="row">
+				<div class="col-md-4 col-md-offset-4">
+					<div class="panel panel-primary">
+						<div class="panel-heading">
+							<h4>Login Here</h4>
+						</div>
+						<div class="panel-body">
+							<div th:if="${param.error}">
+					            Invalid username and password.
+					        </div>
+					        <div th:if="${param.logout}">
+					            You have been logged out.
+					        </div>
+					        <form th:action="@{/login}" method="post">
+					            <div class="form-group">
+					            	<label> User Name : </label>
+					            	<input type="text" name="username" class="form-control"/>
+				            	</div>
+					            <div class="form-group">
+					            	<label> Password: </label>
+					            	<input type="password" name="password" class="form-control"/>
+				            	</div>
+					            <button type="submit" class="btn btn-success"><i class="fa fa-sign-in"></i> Sing In</button>
+					        </form>
+						</div>
+						<div class="panel-footer"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- /content area -->
+		<span th:substituteby="commons :: common-js"></span>
+	</body>
+</html>
