@@ -25,8 +25,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				.antMatchers("/todo", "/todo/**").authenticated()
 				.and()
 			.formLogin()
-				.loginPage("/login")
-				.permitAll()
+				.loginPage("/login").permitAll()
 				.and()
 			.logout()
 				.permitAll();
