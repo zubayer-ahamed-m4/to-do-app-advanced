@@ -60,21 +60,9 @@
 input #des{
 	resize:both;
 }
-
-
-
-
-/* ==== */
-
-.editLinkButton{
-	display: none;
+#updateForm > a{
+	display: inline-block;
 }
-.item-box:HOVER > .editLinkButton{
-	display: inline-block !important;
-}
-.editLinkButton:hover{
-	color: red;
-}
-.panel-box{
-	cursor: pointer;
+#updateForm > a:hober{
+	color: #fff;
 }
